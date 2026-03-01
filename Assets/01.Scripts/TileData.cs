@@ -34,4 +34,12 @@ public class TileData
             }
         }
     }
+
+    public TileData Clone()
+    {
+        TileData clone = new TileData(this.x, this.y);
+        clone.type = this.type;
+        clone.color = this.color;
+        return clone;
+    }
 }
