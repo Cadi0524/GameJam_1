@@ -1,0 +1,760 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8c648e05d6bd254786c4ba478fb27c7, type: 3}
+  m_Name: Stage_2
+  m_EditorClassIdentifier: Assembly-CSharp::TileMap
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: tiles
+      Entry: 7
+      Data: 0|TileData[,], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 40
+    - Name: ranks
+      Entry: 1
+      Data: 8|5
+    - Name: 
+      Entry: 7
+      Data: 1|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 2
+    - Name: color
+      Entry: 3
+      Data: 8
+    - Name: x
+      Entry: 3
+      Data: 0
+    - Name: y
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 2|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 0
+    - Name: y
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 3|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 0
+    - Name: y
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 4|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 0
+    - Name: y
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 5|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 0
+    - Name: y
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 6|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 1
+    - Name: y
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 7|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 1
+    - Name: y
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 8|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 2
+    - Name: color
+      Entry: 3
+      Data: 32
+    - Name: x
+      Entry: 3
+      Data: 1
+    - Name: y
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 9|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 3
+    - Name: color
+      Entry: 3
+      Data: 4
+    - Name: x
+      Entry: 3
+      Data: 1
+    - Name: y
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 10|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 1
+    - Name: y
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 11|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 2
+    - Name: y
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 12|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 2
+    - Name: y
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 13|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 3
+    - Name: color
+      Entry: 3
+      Data: 8
+    - Name: x
+      Entry: 3
+      Data: 2
+    - Name: y
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 14|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 2
+    - Name: y
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 15|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 2
+    - Name: y
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 16|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 3
+    - Name: color
+      Entry: 3
+      Data: 16
+    - Name: x
+      Entry: 3
+      Data: 3
+    - Name: y
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 17|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 3
+    - Name: y
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 18|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 3
+    - Name: y
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 19|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 3
+    - Name: y
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 20|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 3
+    - Name: y
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 21|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 3
+    - Name: color
+      Entry: 3
+      Data: 16
+    - Name: x
+      Entry: 3
+      Data: 4
+    - Name: y
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 22|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 4
+    - Name: y
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 23|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 4
+    - Name: y
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 24|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 3
+    - Name: color
+      Entry: 3
+      Data: 32
+    - Name: x
+      Entry: 3
+      Data: 4
+    - Name: y
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 25|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 3
+    - Name: color
+      Entry: 3
+      Data: 32
+    - Name: x
+      Entry: 3
+      Data: 4
+    - Name: y
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 26|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 3
+    - Name: color
+      Entry: 3
+      Data: 16
+    - Name: x
+      Entry: 3
+      Data: 5
+    - Name: y
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 27|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 5
+    - Name: y
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 28|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 5
+    - Name: y
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 29|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 3
+    - Name: color
+      Entry: 3
+      Data: 32
+    - Name: x
+      Entry: 3
+      Data: 5
+    - Name: y
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 30|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 3
+    - Name: color
+      Entry: 3
+      Data: 32
+    - Name: x
+      Entry: 3
+      Data: 5
+    - Name: y
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 31|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 6
+    - Name: y
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 32|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 6
+    - Name: y
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 33|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 2
+    - Name: color
+      Entry: 3
+      Data: 4
+    - Name: x
+      Entry: 3
+      Data: 6
+    - Name: y
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 34|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 3
+    - Name: color
+      Entry: 3
+      Data: 32
+    - Name: x
+      Entry: 3
+      Data: 6
+    - Name: y
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 35|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 3
+    - Name: color
+      Entry: 3
+      Data: 32
+    - Name: x
+      Entry: 3
+      Data: 6
+    - Name: y
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 36|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 7
+    - Name: y
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 37|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 7
+    - Name: y
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 38|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 7
+    - Name: y
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 39|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: color
+      Entry: 3
+      Data: 0
+    - Name: x
+      Entry: 3
+      Data: 7
+    - Name: y
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 40|TileData, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 2
+    - Name: color
+      Entry: 3
+      Data: 16
+    - Name: x
+      Entry: 3
+      Data: 7
+    - Name: y
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  width: 8
+  height: 5

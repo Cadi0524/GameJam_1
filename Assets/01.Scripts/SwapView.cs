@@ -11,6 +11,7 @@ public class SwapView : MonoBehaviour, IPointerClickHandler
         // 클릭되면 스왑 컨트롤러의 함수 실행
         if (paperAnimationController != null)
         {
+            
             paperAnimationController.SwapPapers(this.gameObject);
         }
     }

@@ -12,6 +12,10 @@ public class PaperAnimationController : MonoBehaviour
     public TextMeshProUGUI noteTextUI;
     private RectTransform boardRect;
 
+    [Title("편지지")]
+
+    [SerializeField] private Image noteImage;
+
     [Title("스왑 애니메이션 세팅")]
     public float duration = 0.3f;
     [InfoBox("종이 높이의 몇 %만큼 위로 뽑아낼지 결정 (0.65 = 65%)")]
@@ -38,19 +42,16 @@ public class PaperAnimationController : MonoBehaviour
 
 
     [SerializeField] private BoardDrawView boardDrawView;
-    public void InitTargets(RectTransform newBoard, string noteText, TMP_FontAsset fontAsset)
+    public void InitTargets(RectTransform newBoard, Sprite sprite)
     {
         boardRect = newBoard;
 
-        if (noteTextUI != null)
+
+        if (noteImage != null && sprite != null)
         {
-            noteTextUI.text = noteText;
-            if (fontAsset != null)
-            {
-                noteTextUI.font = fontAsset;
-            }
+            noteImage.sprite = sprite;
+            noteImage.SetNativeSize();
         }
-        noteRect.sizeDelta = boardRect.sizeDelta;
 
         SwapView boardView = boardRect.gameObject.GetComponent<SwapView>();
         if (boardView != null) boardView.paperAnimationController = this;
@@ -98,6 +99,7 @@ public class PaperAnimationController : MonoBehaviour
             if (!isBoardFront && clickedObj == noteRect.gameObject) return;
         }
 
+        SoundManager.Instance.PlaySFX(SoundType.PaperSwap);
         isAnimating = true;
 
         RectTransform goToFront = isBoardFront ? noteRect : boardRect;
@@ -146,19 +148,21 @@ public class PaperAnimationController : MonoBehaviour
 
     public void PlayClearOutro(Action onComplete)
     {
-        if (boardRect == null || noteRect == null)
-        {
-            onComplete?.Invoke(); //
-        }
 
+        Debug.Log("[PaperAnimationController] 클리어 아웃트로(위로 날리기)");
         Sequence outroSeq = DOTween.Sequence();
+
+        SoundManager.Instance.PlaySFX(SoundType.PaperUP);
 
         outroSeq.Join(boardRect.DOAnchorPosY(1000f, outroDuration).SetRelative().SetEase(Ease.InBack));
         outroSeq.Join(noteRect.DOAnchorPosY(1000f, outroDuration).SetRelative().SetEase(Ease.InBack));
 
         outroSeq.OnComplete(() =>
         {
-            onComplete?.Invoke();
+            Debug.Log("클리어 아웃트로 끝");
+
+            onComplete?.Invoke(); //
+
         });
     }
 }

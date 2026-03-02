@@ -27,6 +27,8 @@ public static class GameEvents
     // 게임 끝 ( 리셋)
     public static Action OnGameReset;
 
+    public static Action<bool, int> OnClearHelper;
+
     // 게임 클리어
     public static Action OnGameClear;
 

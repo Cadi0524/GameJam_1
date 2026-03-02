@@ -38,7 +38,7 @@ MonoBehaviour:
       Data: 2
     - Name: color
       Entry: 3
-      Data: 8
+      Data: 2
     - Name: x
       Entry: 3
       Data: 0
@@ -323,10 +323,10 @@ MonoBehaviour:
       Data: 17|TileData, Assembly-CSharp
     - Name: type
       Entry: 3
-      Data: 0
+      Data: 3
     - Name: color
       Entry: 3
-      Data: 0
+      Data: 2
     - Name: x
       Entry: 3
       Data: 3

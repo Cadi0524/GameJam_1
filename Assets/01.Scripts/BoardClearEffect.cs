@@ -12,7 +12,7 @@ public class BoardClearEffect : SerializedMonoBehaviour
     public List<GameObject> dotObjects = new List<GameObject>();
 
     [Title("연출 세팅")]
-    public float fillDuration = 1.5f;
+    public float fillDuration = 2f;
 
     public void PlayClearEffect(Action onComplete)
     {
@@ -20,6 +20,7 @@ public class BoardClearEffect : SerializedMonoBehaviour
 
         if (colorPhotoImage != null)
         {
+            SoundManager.Instance.PlaySFX(SoundType.ImageToColor);
             colorPhotoImage.fillAmount = 0f;
             colorPhotoImage.DOFillAmount(1f, fillDuration)
                 .SetEase(Ease.InOutSine)

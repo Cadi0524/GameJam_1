@@ -1,6 +1,5 @@
 using UnityEngine;
 using Sirenix.OdinInspector;
-using UnityEngine.WSA;
 using UnityEditor;
 using Sirenix.Utilities;
 
@@ -18,7 +17,6 @@ public class TileMap : SerializedScriptableObject
 
 
 #if UNITY_EDITOR
-    // Odin이 격자의 각 칸을 그릴 때 호출하는 커스텀 함수야
     private static TileData DrawTileCell(Rect rect, TileData value)
     {
         // 1. 데이터가 비어있다면 기본값으로 초기화 (에러 방지용)
@@ -48,9 +46,27 @@ public class TileMap : SerializedScriptableObject
         {
             case TileColor.None: return new Color(0.2f, 0.2f, 0.2f); // 빈칸은 어두운 회색
             case TileColor.Stage1_Flower: return Color.red;
-            case TileColor.Blue: return Color.blue;
             case TileColor.Stage1_Moon: return Color.green;
-            case TileColor.Yellow: return Color.yellow;
+            case TileColor.Stage2_Flower: return Color.red;
+            case TileColor.Stage2_Vase: return Color.cyan;
+            case TileColor.Stage2_Cat: return Color.yellow;
+            case TileColor.Stage2_SOFA: return Color.brown;
+            case TileColor.Stage3_Sun_Red: return Color.red;
+            case TileColor.Stage3_Sun_Yellow: return Color.yellow;
+            case TileColor.Stage3_Sun: return new Color(1f, 0.5f, 0f); // 빨강+노랑 = 주황
+            case TileColor.Stage3_Ship: return Color.brown;
+            case TileColor.Stage3_Sail: return Color.white;
+            case TileColor.Stage3_Human: return Color.purple;
+            case TileColor.Stage4_AirBalloonPurple_Red: return new Color(0.5f, 0f, 0.5f); // 보라색 풍선 빨강
+            case TileColor.Stage4_AirBalloonPurple_Blue: return new Color(0.5f, 0f, 0.5f); // 보라색 풍선 파랑
+            case TileColor.Stage4_AirBalloonPurple: return new Color(0.5f, 0f, 0.5f); // 보라색 풍선 (빨강+파랑)
+            case TileColor.Stage4_AirBallonYellow: return Color.yellow;
+            case TileColor.Stage4_AirBalloonGreen: return Color.green;
+            case TileColor.Stage4_AirBallonwPink: return Color.hotPink;
+            case TileColor.Stage4_AirBallonMagenta: return Color.magenta;
+            case TileColor.Stage4_AirBallonEmerald: return new Color(0f, 0.8f, 0.8f); // 에메랄드 색상
+
+
             default: return new Color(0.2f, 0.2f, 0.2f);
         }
     }

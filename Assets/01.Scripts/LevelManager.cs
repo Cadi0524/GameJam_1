@@ -10,9 +10,15 @@ public class LevelManager : SerializedMonoBehaviour
     [Title("각 레벨 리스트")]
     [ListDrawerSettings(ShowIndexLabels = true)]
     public List<BoardInputView> levelBoards = new();
-    [Title("각 레벨 쪽지 리스트")]
+    [Title("각 레벨 쪽지 리스트 & 편지지")]
     public List<LevelNote> levelNotes = new();
     public List<TMP_FontAsset> noteFonts = new();
+
+    public List<Sprite> noteSprites = new();
+
+    [Title("메일 박스 애니 컨트롤러")]
+    public MailBoxAnimationController mailBoxAnimationController;
+
 
     public TMP_FontAsset defaultNoteFont;
 
@@ -21,14 +27,26 @@ public class LevelManager : SerializedMonoBehaviour
 
     [Title("현재 스테이지")]
     [ShowInInspector]
-    private int currentStage = 0;
+    private int _currentStage = 0;
 
 
+    [Title("Ending")]
+    [SerializeField] private EndingController endingController;
+
+    private int currentStage
+    {
+        get { return _currentStage; }
+        set
+        {
+            Debug.Log($"<color=orange>[LevelManager]</color> 스테이지 변경됨! 기존: {_currentStage} -> <b>변경: {value}</b>");
+            _currentStage = value;
+        }
+    }
     [Title("클릭 시 앞뒤 바뀌는 SwapView")]
     public SwapView swapView;
 
 
-[Title("클리어 연출 끝난 후 올라가기 전까지 대기 시간")]
+    [Title("클리어 연출 끝난 후 올라가기 전까지 대기 시간")]
     public float clearEffectWaitTime = 3f;
     private BoardInputView currentBoardObject;
 
@@ -64,7 +82,17 @@ public class LevelManager : SerializedMonoBehaviour
     [Button("▶️ 처음부터 시작 (Level 0)", ButtonSizes.Medium)]
     public void StartGame()
     {
-        LoadLevel(0);
+        currentStage = 0;
+        currentState = GameState.DeskEmpty;
+
+        if (currentBoardObject != null)
+        {
+            Destroy(currentBoardObject.gameObject);
+        }
+
+        StartCoroutine(WaitAndDeliverMailRoutine());
+
+        Debug.Log("🎮 [LevelManager] 게임 시작! 첫 번째 메일 도착 대기 중...");
     }
     [ButtonGroup("TestGroup")]
     [Button("🔄 현재 레벨 재시작")]
@@ -122,7 +150,6 @@ public class LevelManager : SerializedMonoBehaviour
 
 
 
-            Debug.Log($"[LevelManager] {index}번 레벨 런타임 복사 완료 및 이벤트 송출!");
         }
         else
         {
@@ -130,23 +157,35 @@ public class LevelManager : SerializedMonoBehaviour
         }
         if (swapView.paperAnimationController != null)
         {
-            string noteData = (index < levelNotes.Count && levelNotes[index] != null)
-                              ? levelNotes[index].noteText : "쪽지 데이터가 없습니다.";
+            // string noteData = (index < levelNotes.Count && levelNotes[index] != null)
+            //                   ? levelNotes[index].noteText : "쪽지 데이터가 없습니다.";
 
-            TMP_FontAsset font = noteFonts[index < noteFonts.Count ? index : -1] ?? defaultNoteFont;
-            swapView.paperAnimationController.InitTargets(currentBoardObject.GetComponent<RectTransform>(), noteData, font);
+            // TMP_FontAsset font = noteFonts[index < noteFonts.Count ? index : -1] ?? defaultNoteFont;
+
+            Sprite sprite = (index < noteSprites.Count && noteSprites[index] != null)
+                            ? noteSprites[index] : null;
+            swapView.paperAnimationController.InitTargets(currentBoardObject.GetComponent<RectTransform>(), sprite);
+
+
         }
     }
 
     private void HandleGameClear()
     {
         Debug.Log($"[LevelManager] {currentStage} 레벨 클리어 이벤트 수신!");
+        if (currentState == GameState.LevelCleared)
+        {
+            Debug.Log("<color=grey>[LevelManager]</color> 이미 클리어 처리 중입니다. 중복 이벤트를 무시합니다.");
+            return;
+        }
         currentState = GameState.LevelCleared;
         StartCoroutine(ProcessLevelClearRoutine());
 
     }
     private IEnumerator ProcessLevelClearRoutine()
     {
+        SoundManager.Instance.PlaySFX(SoundType.Success);
+        yield return new WaitForSeconds(1f);
 
         bool isEffectDone = false;
         bool isClearAnimationDone = false;
@@ -157,22 +196,20 @@ public class LevelManager : SerializedMonoBehaviour
         {
             effectView.PlayClearEffect(() =>
             {
-                Debug.Log("[LevelManager] 사진 물들기 연출 완료!");
                 isEffectDone = true;
             });
 
             // 물들기 애니메이션이 끝날 때까지 여기서 멈춰서 기다림
             yield return new WaitUntil(() => isEffectDone);
         }
-        //TODO: 색상이 다 바뀌고 잠깐 멈추는 타이밍 넣기 - 1.5f 정도 ? 
+
         yield return new WaitForSeconds(clearEffectWaitTime);
         if (currentBoardObject != null)
+
         {
-            Destroy(currentBoardObject.gameObject);
 
             swapView.paperAnimationController.PlayClearOutro(() =>
             {
-                Debug.Log("[LevelManager] 클리어 아웃트로 애니메이션 완료!");
                 isClearAnimationDone = true;
             });
 
@@ -192,7 +229,8 @@ public class LevelManager : SerializedMonoBehaviour
         else
         {
             Debug.Log("🎉 [LevelManager] 모든 레벨을 클리어했습니다! 엔딩을 띄웁니다.");
-            // GameEvents.OnShowEnding?.Invoke();
+            StartCoroutine(WaitAndDeliverMailRoutine());
+
         }
     }
 
@@ -201,10 +239,20 @@ public class LevelManager : SerializedMonoBehaviour
 
         yield return new WaitForSeconds(1.5f);
 
-        // TODO: 우체통이 흔들리거나, 편지 아이콘이 뜨는 애니메이션/이벤트 호출
+        if (mailBoxAnimationController != null)
+        {
+            int lettersCount = (currentStage < 4) ? 1 : 4; // 예시: 4레벨까지는 편지 1장, 그 이후로는 편지 4장 도착
+            mailBoxAnimationController.PlayMailArrived(() =>
+            {
+                currentState = GameState.MailArrived;
+            }, lettersCount);
+        }
+        else
+        {
+            // 안전 장치: 컴포넌트가 없을 경우 바로 상태 변경
+            currentState = GameState.MailArrived;
+        }
 
-
-        currentState = GameState.MailArrived;
     }
 
     private void HandleMailBoxClicked()
@@ -216,7 +264,23 @@ public class LevelManager : SerializedMonoBehaviour
             return;
         }
 
-        LoadLevel(currentStage);
-        currentState = GameState.Playing;
+        if (mailBoxAnimationController != null)
+        {
+            mailBoxAnimationController.PlayMailEmpty();
+            SoundManager.Instance.PlaySFX(SoundType.MailBoxOpen);
+        }
+        Debug.Log($"currentStage : {currentStage}");
+
+
+        if (currentStage < 4)
+        {
+            LoadLevel(currentStage);
+            currentState = GameState.Playing;
+        }
+        else
+        {
+            endingController.StartEndingSequence();
+        }
+
     }
 }

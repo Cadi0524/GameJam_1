@@ -3,6 +3,7 @@ using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using System;
 using UnityEngine.InputSystem;
+using TMPro;
 public class BoardManager : SerializedMonoBehaviour
 {
 
@@ -16,12 +17,14 @@ public class BoardManager : SerializedMonoBehaviour
     private Dictionary<Vector2Int, List<TileColor>> mixerInputs = new Dictionary<Vector2Int, List<TileColor>>();
 
 
+    private bool isCleared = false;
 
     public void Init(TileMap tileMap)
     {
         currentBoard = tileMap;
         paths.Clear();
         mixerInputs.Clear();
+        isCleared = false;
     }
 
     private void OnEnable()
@@ -33,6 +36,7 @@ public class BoardManager : SerializedMonoBehaviour
         {
             Init(tileMap);
         };
+        isCleared = false;
     }
 
     private void OnDisable()
@@ -54,7 +58,9 @@ public class BoardManager : SerializedMonoBehaviour
         currentColor = TileColor.None;
 
         //게임 오버 검사
-        CheckGameClear();
+        // CheckGameClear();
+
+        SoundManager.Instance.PlaySFX(SoundType.PenUp);
     }
     private void HandleTileDrag(Vector2Int pos)
     {
@@ -175,6 +181,7 @@ public class BoardManager : SerializedMonoBehaviour
             {
                 Debug.Log($"<color=green>[BoardManager]</color> 🎉 [도착점 연결 성공] 색상: {currentColor}. 드래그 자동 종료.");
                 isDragging = false;
+
                 CheckGameClear();
                 //targetTile.color = currentColor; // 도착점도 내 색으로 칠하기
             }
@@ -185,6 +192,7 @@ public class BoardManager : SerializedMonoBehaviour
     {
         Debug.Log($"<color=yellow>[BoardManager]</color> 👆 PointerDown 이벤트 수신 완료! / 클릭 위치: {pos}");
 
+        SoundManager.Instance.PlaySFX(SoundType.PenDown);
         if (currentBoard == null)
         {
             Debug.LogError("<color=red>[BoardManager]</color> ❌ currentBoard가 Null이야! GameEvents.OnBoardInitialized가 안 불렸거나 Init이 안 됐어.");
@@ -201,7 +209,12 @@ public class BoardManager : SerializedMonoBehaviour
 
         Debug.Log($"<color=cyan>[BoardManager]</color> 🔎 클릭한 타일 정보 -> 타입: {clickedTile.type}, 색상: {clickedTile.color}");
 
-        if (clickedTile.color != TileColor.None)
+
+        bool canStartDragging = clickedTile.color != TileColor.None &&
+                                clickedTile.type != TileType.Block &&
+                                clickedTile.type != TileType.End;
+
+        if (canStartDragging)
         {
             if (clickedTile.type == TileType.Mixer)
             {
@@ -211,16 +224,16 @@ public class BoardManager : SerializedMonoBehaviour
                     return;
                 }
             }
+
             isDragging = true;
             currentColor = clickedTile.color;
-            Debug.Log($"<color=green>[BoardManager]</color> ✅ 드래그 모드 ON! 현재 색상: {currentColor}");
+            Debug.Log($"<color=green>[BoardManager]</color> ✅ 드래그 시작! 색상: {currentColor}");
 
-            // 1) 이미 드래그 했던 색일 때 
+            // 2. 경로 처리
             if (paths.ContainsKey(currentColor))
             {
                 int index = paths[currentColor].IndexOf(pos);
 
-                // 클릭한 타일이 경로 위에 존재할 때만 자르기 
                 if (index != -1)
                 {
                     Debug.Log($"<color=yellow>[BoardManager]</color> ✂️ 기존 경로 위를 클릭함. 인덱스 {index + 1}부터 꼬리 자르기 실행!");
@@ -228,17 +241,15 @@ public class BoardManager : SerializedMonoBehaviour
                 }
                 else if (clickedTile.type == TileType.Start || clickedTile.type == TileType.Mixer)
                 {
-                    // 경로엔 없지만 시작점을 눌렀다면 완전히 새로 긋기
-                    Debug.Log($"<color=yellow>[BoardManager]</color> 🔄 시작점을 다시 누름! 기존 경로 초기화 후 새로 시작!");
+                    Debug.Log($"<color=yellow>[BoardManager]</color> 🔄 시작점/믹서를 다시 누름! 기존 경로 초기화 후 새로 시작!");
                     paths[currentColor].Clear();
                     paths[currentColor].Add(pos);
                 }
                 else
                 {
-                    Debug.Log($"<color=grey>[BoardManager]</color> ℹ️ 이미 있는 색상인데, 경로나 시작점이 아닌 곳을 눌러서 아무 처리도 안 함.");
+                    Debug.Log($"<color=grey>[BoardManager]</color> ℹ️ 이미 있는 색상이지만, 경로나 시작점이 아닌 곳을 눌러서 드래그만 활성화함.");
                 }
             }
-            // 2) 생전 처음 누르는 색일 때
             else
             {
                 Debug.Log($"<color=green>[BoardManager]</color> 🆕 처음 누르는 색상! 새로운 경로 리스트 생성 완료.");
@@ -247,7 +258,8 @@ public class BoardManager : SerializedMonoBehaviour
         }
         else
         {
-            Debug.Log($"<color=grey>[BoardManager]</color> ⚪ 클릭한 타일이 색상이 없는 빈 칸(TileColor.None)이라서 드래그를 시작하지 않음.");
+            string reason = clickedTile.type == TileType.End ? "도착점(End)" : "색상이 없는 타일";
+            Debug.Log($"<color=orange>[BoardManager]</color> ⚪ {reason}이므로 드래그를 시작하지 않습니다.");
         }
     }
     public void CutPath(TileColor color, int startIndex)
@@ -302,47 +314,77 @@ public class BoardManager : SerializedMonoBehaviour
 
     public void CheckGameClear()
     {
-        if (currentBoard == null) return;
+        // 이미 클리어된 상태이거나 보드가 없으면 무시
+        if (currentBoard == null || isCleared) return;
 
+        bool isBoardFull = true;
         HashSet<TileColor> requireColors = new HashSet<TileColor>();
 
-
+        // 1. 보드 전체 스캔 (빈 칸 여부 확인 및 요구 색상 수집)
         for (int x = 0; x < currentBoard.width; x++)
         {
             for (int y = 0; y < currentBoard.height; y++)
             {
                 TileData tile = currentBoard.GetTile(x, y);
-                // 모든 None은 채워져 있어야 함
+
+                // 빈 칸 체크
                 if (tile.type == TileType.None && tile.color == TileColor.None)
                 {
-                    return; // 하나라도 None이면 게임 클리어 실패
+                    isBoardFull = false;
                 }
+
+                // End 타일의 '색상'만 수집 (개발자님의 원래 로직 복구!)
                 if (tile.type == TileType.End)
                 {
-                    requireColors.Add(tile.color); // 색상에 추가
+                    requireColors.Add(tile.color);
                 }
             }
         }
 
+        int wrongCount = 0;
+
+        // 2. 각 "요구 색상별"로 선이 End 타일에 도착했는지 검사
         foreach (TileColor targetColor in requireColors)
         {
+            // 2-1. 아직 해당 색상의 선을 긋지도 않았거나, 끊겨있다면 (진행 중)
             if (!paths.ContainsKey(targetColor) || paths[targetColor].Count == 0)
             {
-                return;
+                return; // 검사 중단, 더 플레이해야 함
             }
 
             List<Vector2Int> path = paths[targetColor];
             Vector2Int endPos = path[path.Count - 1];
             TileData endTile = currentBoard.GetTile(endPos.x, endPos.y);
 
-            if (endTile == null || endTile.type != TileType.End || endTile.color != targetColor)
+            // 2-2. 선의 끝이 End 타일이 아닌 허공(None 등)에 멈춰있다면 (진행 중)
+            if (endTile == null || endTile.type != TileType.End)
             {
-                Debug.Log($"<color=grey>[GameClearCheck]</color> {targetColor} 색상의 선이 End 지점에 올바르게 닿지 않았습니다.");
-                return;
+                return; // 검사 중단, 더 플레이해야 함
+            }
+
+            // 2-3. End 타일에 닿긴 닿았는데, 타일이 요구하는 색상과 선의 색상이 다를 경우
+            if (endTile.color != targetColor)
+            {
+                wrongCount++; // 오답 카운트 증가! (return하지 않고 끝까지 검사함)
             }
         }
 
-        Debug.Log("-----게임 클리어 완료! 모든 색상이 End 지점에 연결되었습니다!------");
-        GameEvents.OnGameClear?.Invoke();
+        // 3. 여기까지 코드가 내려왔다는 것은 "모든 요구 색상의 선이 어떤 End 타일에든 연결은 되었다"는 뜻입니다.
+
+        if (isBoardFull && wrongCount == 0)
+        {
+            // [조건 3] 빈 칸 없음 + 오답 없음 = 완벽한 클리어!
+            Debug.Log("<color=green>-----게임 클리어 완료! 모든 색상이 End 지점에 알맞게 연결되었습니다!------</color>");
+            isCleared = true;
+            GameEvents.OnGameClear?.Invoke();
+        }
+        else
+        {
+            // [조건 1] 빈칸이 있음 (isBoardFull == false)
+            // [조건 2] 색이 틀림 (wrongCount > 0)
+            Debug.Log($"<color=orange>[Helper 호출]</color> 보드 꽉참 여부: {isBoardFull} / 틀린 색 개수: {wrongCount}");
+            SoundManager.Instance.PlaySFX(SoundType.Fail);
+            GameEvents.OnClearHelper?.Invoke(isBoardFull, wrongCount);
+        }
     }
 }
